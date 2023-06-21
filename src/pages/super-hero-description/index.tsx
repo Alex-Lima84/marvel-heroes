@@ -20,14 +20,9 @@ export default function SuperHeroDescription() {
   const navigate = useNavigate();
   const { id } = useParams()
   const [heroeData, setHeroeData] = useState<HeroInterface>()
-  const [errorMessage, setErrorMessage] = useState<string>('')
-
 
   const getHeroInfo = async () => {
     generateHash()
-    if (!id) {
-      setErrorMessage('An error occurred.')
-    }
 
     const { ts, apikey, hash } = generateHash();
 
@@ -39,7 +34,6 @@ export default function SuperHeroDescription() {
           hash
         },
       })
-      console.log(data.data.results[0])
       setHeroeData(data.data.results[0])
 
     } catch (error) {
