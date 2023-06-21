@@ -2,7 +2,7 @@ import axios from "axios";
 import { MD5 } from 'crypto-js';
 
 export const api = axios.create({
-  baseURL: "http://gateway.marvel.com/v1/public/",
+  baseURL: "https://gateway.marvel.com/v1/public/",
 });
 
 const privateKey: string | undefined = process.env.REACT_APP_PRIVATE_KEY;
