@@ -187,10 +187,9 @@ const H2 = styled.h2`
     text-align: center;
 
     @media(max-width: 650px) {
-    font-size: 14px;
+        font-size: 14px;
 
     @media(max-width: 450px) {
-        font-size: 12px;
-        text-align: left;
+        font-size: 12px;        
 }
 `
