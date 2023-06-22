@@ -1,27 +1,17 @@
-import { MouseEvent, useEffect, useState, useRef } from 'react';
+import { MouseEvent, useEffect, useState, useRef, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { api } from "../../services/index";
 import { generateHash } from '../../services/index';
 import Header from '../../components/header';
 import Footer from '../../components/footer';
-
-
-interface HeroesInterface {
-    id: number;
-    name: string;
-    thumbnail: {
-        path: string;
-        extension: string;
-    };
-}
-
-type HeroesType = HeroesInterface[];
+import { HeroesType } from '../../types';
 
 export default function Home() {
     const navigate = useNavigate();
     const [heroesData, setHeroesData] = useState<HeroesType>([])
     const [heroName, setHeroName] = useState<string>('')
+    const [infoMessage, setInfoMessage] = useState<string>('')
     const [errorMessage, setErrorMessage] = useState<string>('')
     const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -32,11 +22,12 @@ export default function Home() {
     const findHero = async (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
 
         if (heroName === '') {
-            setErrorMessage('Hero not found 😢')
+            setErrorMessage('Please type the name of the Hero 😀')
             return
         }
 
         setHeroesData([])
+        setInfoMessage('Loading data...')
         setErrorMessage('')
         e.preventDefault()
 
@@ -52,13 +43,15 @@ export default function Home() {
                 },
             })
 
-            if (!data.data.results.length) {
+            if (data.data.results.length) {
+                setHeroesData(data.data.results)
+                setInfoMessage('')
+                setErrorMessage('')
+            } else {
                 setErrorMessage('Hero not found 😢')
+                setInfoMessage('')
                 return
             }
-
-            setHeroesData(data.data.results)
-            setErrorMessage('')
 
             if (inputRef.current) {
                 inputRef.current.value = ''
@@ -73,13 +66,18 @@ export default function Home() {
         navigate(`/super-hero-description/${id}`);
     }
 
+    const getHeroName = (e: { target: { value: SetStateAction<string>; }; }) => {
+        setErrorMessage('')
+        setHeroName(e.target.value)
+    }
+
     return (
         <>
             <OutterContainer>
                 <Header />
                 <InnerContainer>
                     <Label>Please type the name of your favorite hero!</Label>
-                    <Input ref={inputRef} onChange={(e) => setHeroName(e.target.value)}></Input>
+                    <Input ref={inputRef} onChange={(e) => getHeroName(e)}></Input>
                     <Button onClick={(e) => { findHero(e) }} >Search</Button>
                 </InnerContainer>
             </OutterContainer>
@@ -93,7 +91,8 @@ export default function Home() {
                     </A>
                 </HeroesContainer>
             )) : ''}
-            {errorMessage === '' ? '' : <H2>Hero not found 😢</H2>}
+            {infoMessage === '' ? '' : <H2>{infoMessage}</H2>}
+            {errorMessage === '' ? '' : <H2>{errorMessage}</H2>}
             <Footer />
         </>
     );
@@ -112,6 +111,14 @@ const Label = styled.label`
     font-size: 24px;
     margin-bottom: 20px; 
     color: #000;  
+
+    @media(max-width: 650px) {
+        font-size: 18px;
+    }
+
+    @media(max-width: 450px) {
+        font-size: 14px;
+    }
 `
 
 const Input = styled.input`
@@ -133,12 +140,23 @@ const Button = styled.button`
     cursor: pointer;
     outline: none;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+    @media(max-width: 450px) {
+        height: 20px;
+        font-size: 12px;
+    }
 `
 
 const InnerContainer = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 400px;
+
+    @media(max-width: 650px) {
+        margin-top: 250px;
+    
+    @media(max-width: 450px) {
+        margin-top: 200px;
 `
 const HeroesContainer = styled.div`
     margin: 40px;
@@ -153,6 +171,10 @@ const Img = styled.img`
     max-width: 100px;
     border-radius: 50%;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    @media(max-width: 450px) {
+        max-width: 60px;
+    }
 `
 const HeroesNamesContainer = styled.div`
     display: flex;
@@ -161,6 +183,14 @@ const HeroesNamesContainer = styled.div`
 `
 
 const H2 = styled.h2`
-   font-weight: 300;
-   text-align: center;
+    font-weight: 300;
+    text-align: center;
+
+    @media(max-width: 650px) {
+    font-size: 14px;
+
+    @media(max-width: 450px) {
+        font-size: 12px;
+        text-align: left;
+}
 `

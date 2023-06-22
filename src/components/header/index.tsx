@@ -18,11 +18,19 @@ const HeaderContainer = styled.div`
     background-repeat: no-repeat;
     background-position: center center;
     width: 100%;
-    min-height: 300px;
+    height: 300px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;    
     position: fixed; 
+
+    @media(max-width: 650px) {
+        height: 200px;
+    }
+    
+    @media(max-width: 450px) {
+        height: 180px;
+    }
 `
 
 const H1 = styled.h1`
@@ -33,5 +41,12 @@ const H1 = styled.h1`
     background: none;
     font-weight: 300;
     text-align: center;
+
+    @media(max-width: 650px) {
+        font-size: 24px;
+    }
     
+    @media(max-width: 450px) {
+        font-size: 18px;
+    }
 `

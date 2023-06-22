@@ -5,23 +5,18 @@ import { generateHash } from '../../services';
 import styled from 'styled-components';
 import Header from '../../components/header';
 import Footer from '../../components/footer';
-
-interface HeroInterface {
-  id: number;
-  name: string;
-  description: string,
-  thumbnail: {
-    path: string;
-    extension: string;
-  };
-}
+import { HeroInterface } from '../../types';
 
 export default function SuperHeroDescription() {
   const navigate = useNavigate();
   const { id } = useParams()
   const [heroeData, setHeroeData] = useState<HeroInterface>()
+  const [infoMessage, setInfoMessage] = useState<string>('')
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   const getHeroInfo = async () => {
+
+    setInfoMessage('Loading data...')
     generateHash()
 
     const { ts, apikey, hash } = generateHash();
@@ -34,7 +29,14 @@ export default function SuperHeroDescription() {
           hash
         },
       })
-      setHeroeData(data.data.results[0])
+
+      if (data.data.results.length) {
+        setInfoMessage('')
+        setHeroeData(data.data.results[0])
+      } else {
+        setInfoMessage('')
+        setErrorMessage('An error occurred, please reload the page.')
+      }
 
     } catch (error) {
       console.log(error)
@@ -51,14 +53,17 @@ export default function SuperHeroDescription() {
 
   return (
     <>
-      <Header />
+      <OutterContainer>
+        <Header />
+      </OutterContainer>
+      {errorMessage === '' ? '' : <H2>{errorMessage}</H2>}
+      {infoMessage === '' ? '' : <H2>{infoMessage}</H2>}
       {heroeData ?
-        <Container key={heroeData.id}>
+        <Container>
           <InnerContainer>
             <Img src={`${heroeData.thumbnail.path}.${heroeData.thumbnail.extension}`} alt="Thumbnail" />
-            <h3>{heroeData.name}</h3>
+            <H3>{heroeData.name}</H3>
             {heroeData.description === '' ? <P>Information not available.</P> : <P>{heroeData.description}</P>}
-
             <Button onClick={() => goToHomePage(heroeData.id)} >Go back</Button>
           </InnerContainer>
         </Container>
@@ -68,6 +73,21 @@ export default function SuperHeroDescription() {
   );
 }
 
+const OutterContainer = styled.div`
+  display: flex;
+  flex-direction: column; 
+  justify-content: flex-start;
+  align-items: center; 
+  font-size: 24px;
+  margin-bottom: 400px;
+
+  @media(max-width: 650px) {
+    margin-bottom: 250px;
+
+    @media(max-width: 450px) {
+      margin-bottom: 200px;
+`
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -76,33 +96,70 @@ const Container = styled.div`
   font-size: 24px; 
 `;
 
+const H2 = styled.h2`
+  font-weight: 300;
+  text-align: center;
+  font-size: 20px;
+  margin-top: 40px;
+
+  @media(max-width: 650px) {
+    font-size: 14px;
+
+  @media(max-width: 450px) {
+    font-size: 12px;        
+`
+
 const InnerContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
 `
 
 const Img = styled.img`
   max-width: 400px;
   border-radius: 10px;
   margin-bottom: 20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+  @media(max-width: 650px) {    
+    width: 300px;
+
+  @media(max-width: 450px) {    
+    width: 200px;
+`
+
+const H3 = styled.h3`
+  @media(max-width: 650px) {
+    font-size: 14px;
 `
 
 const P = styled.p`
   max-width: 500px;
   font-size: 20px;
   margin: 20px;
+
+  @media(max-width: 650px) {    
+    font-size: 14px;
+
+    @media(max-width: 450px) {    
+      font-size: 12px;
+}
 `
 
 const Button = styled.button`
-    padding: 0 20px;
-    margin-top: 20px;
-    height: 30px;
-    align-self: center;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    outline: none;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding: 0 20px;
+  margin-top: 20px;
+  height: 30px;
+  align-self: center;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+  @media(max-width: 450px) {
+    height: 20px;
+    font-size: 12px;
+}
 `
