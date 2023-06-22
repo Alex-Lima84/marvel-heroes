@@ -20,7 +20,7 @@ For this project, I used the following tecnologies:
 
 * Axios;
 
-* Crypto;
+* Crypto-js;
 
 # Project execution
 

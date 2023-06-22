@@ -47,7 +47,7 @@ export default function SuperHeroDescription() {
     getHeroInfo()
   }, [])
 
-  const goToHomePage = (id: any) => {
+  const goToHomePage = () => {
     navigate(`/`);
   }
 
@@ -64,7 +64,7 @@ export default function SuperHeroDescription() {
             <Img src={`${heroeData.thumbnail.path}.${heroeData.thumbnail.extension}`} alt="Thumbnail" />
             <H3>{heroeData.name}</H3>
             {heroeData.description === '' ? <P>Information not available.</P> : <P>{heroeData.description}</P>}
-            <Button onClick={() => goToHomePage(heroeData.id)} >Go back</Button>
+            <Button onClick={() => goToHomePage()} >Go back</Button>
           </InnerContainer>
         </Container>
         : ''}
@@ -84,8 +84,8 @@ const OutterContainer = styled.div`
   @media(max-width: 650px) {
     margin-bottom: 250px;
 
-    @media(max-width: 450px) {
-      margin-bottom: 200px;
+  @media(max-width: 450px) {
+    margin-bottom: 200px;
 `
 
 const Container = styled.div`
@@ -142,8 +142,8 @@ const P = styled.p`
   @media(max-width: 650px) {    
     font-size: 14px;
 
-    @media(max-width: 450px) {    
-      font-size: 12px;
+  @media(max-width: 450px) {    
+    font-size: 12px;
 }
 `
 

@@ -3,7 +3,11 @@ import { styled } from "styled-components"
 export default function Header() {
 
     return (
-        <P>Powered by: <A href="https://developer.marvel.com/" target="blank"> Marvel</A></P>
+        <P>Powered by:
+            <A href="https://developer.marvel.com/" target="blank">
+                Marvel
+            </A>
+        </P>
     )
 }
 
@@ -23,6 +27,6 @@ const P = styled.h1`
         font-size: 16px;
     }
 `
-const A = styled.a `
+const A = styled.a`
     color: #DC0107;
 `
